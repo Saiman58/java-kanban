@@ -36,10 +36,6 @@ public class Task {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Taskstatus getStatus() {
         return taskstatus;
     }

@@ -1,7 +1,7 @@
 package tasks;
 
 public class Task {
-    private int id;
+    protected int id;
     private String name;
     private String description;
 

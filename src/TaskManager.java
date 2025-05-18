@@ -10,21 +10,16 @@ public class TaskManager {
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private int generatorId = 1;
-    private int generatorIdSubtask = 1;
 
     //методы для Task
     public Task createTask(Task task) { //создание Task
-        task.setId(getNewtId());
+        task.setId(getNewId());
         tasks.put(task.getId(), task);
         return task;
     }
 
-    private int getNewtId() { // генератор id
+    private int getNewId() { // генератор id
         return generatorId++;
-    }
-
-    private int getNewIdSubtask() { //генератор id Subtask
-        return generatorIdSubtask++;
     }
 
     public Task updateTask(Task task) { //обновление Task
@@ -50,13 +45,15 @@ public class TaskManager {
 
     //методы для Subtask
     public Subtask addNewSubtask(Subtask subtask) { //создание Subtask
-        subtask.setIdSubtask(getNewIdSubtask());
-        subtasks.put(subtask.getIdSubtask(), subtask);
         Epic epic = epics.get(subtask.getIdEpic());
-        if (epic != null) {
-            epic.addSubtask(subtask);
-            epic.updateStatus(); // обновляем статус Subtask
+        if (epic == null) {
+            System.out.println("Для данной подзадачи не найден Epic!");
+            return null;
         }
+        subtask.setId(getNewId());
+        subtasks.put(subtask.getId(), subtask);
+        epic.addSubtask(subtask);
+        epic.updateStatus(); // обновляем статус Subtask
         return subtask;
     }
 
@@ -69,7 +66,7 @@ public class TaskManager {
     }
 
     public Subtask updateSubtask(Subtask subtask) { // обновление Subtask
-        subtasks.put(subtask.getIdSubtask(), subtask);
+        subtasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getIdEpic());
         if (epic != null) {
             epic.updateStatus(); // обновляем статус Epic
@@ -88,9 +85,17 @@ public class TaskManager {
         return subtask;
     }
 
+    public void deleteAllSubtask() { // удаление всех subtask
+        for (Epic epic : epics.values()) {
+            epic.getSubtasks().clear();
+            epic.updateStatus();
+        }
+        subtasks.clear();
+    }
+
     //методы для Epic
     public Epic creatingEpic(Epic epic) {
-        epic.setId(getNewtId());
+        epic.setId(getNewId());
         epics.put(epic.getId(), epic);
         return epic;
     }
@@ -109,10 +114,17 @@ public class TaskManager {
     }
 
     public Epic deleteEpicToId(int id) { //удаление Epic по id
-        return epics.remove(id);
+        Epic epic = epics.remove(id);
+        if (epic != null) {
+            for (Subtask subtask : epic.getSubtasks()) {
+                subtasks.remove(subtask.getId());
+            }
+        }
+        return epic;
     }
 
-    public void deleteEpic() { // удаление всех тасок
+    public void deleteEpic() { // удаление всех Epic
         epics.clear();
+        subtasks.clear();
     }
 }

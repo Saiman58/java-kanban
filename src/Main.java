@@ -69,13 +69,13 @@ public class Main {
 
         System.out.println();
         System.out.println("Проверка: Обновления Subtask");
-        Subtask subtaskForUpdate = new Subtask(subtask1.getIdSubtask(), 1, "Обновление подзадачи1", "Обновление описания подзадачи2", Taskstatus.IN_PROGRESS);
+        Subtask subtaskForUpdate = new Subtask(subtask1.getId(), 1, "Обновление подзадачи1", "Обновление описания подзадачи2", Taskstatus.IN_PROGRESS);
         subtaskForUpdate = taskManager.updateSubtask(subtaskForUpdate);
         System.out.println(subtaskForUpdate);
 
         System.out.println();
         System.out.println("Проверка: Получение таски по id");
-        System.out.println(taskManager.getSubtasksForId(subtask1.getIdSubtask()));
+        System.out.println(taskManager.getSubtasksForId(subtask1.getId()));
 
         System.out.println();
         System.out.println("Проверка: Вывод всех Subtask");
@@ -83,12 +83,20 @@ public class Main {
 
         System.out.println();
         System.out.println("Проверка: Удаление Subtask по id");
-        Subtask deleteSubtask = taskManager.deleteSubtask(subtask2.getIdSubtask());
+        Subtask deleteSubtask = taskManager.deleteSubtask(subtask2.getId());
         System.out.println(deleteSubtask);
 
         System.out.println();
         System.out.println("Проверка: Вывод всех Subtask");
         System.out.println(taskManager.allSubtasks());
+
+        System.out.println();
+        System.out.println("Очистка всех Subtask");
+        taskManager.deleteAllSubtask();
+        System.out.println(taskManager.allSubtasks());
+
+
+
 
         System.out.println("--------------------------");
 
@@ -106,7 +114,8 @@ public class Main {
 
         System.out.println();
         System.out.println("Проверка: Обновления Epic");
-        Epic updateEpic = new Epic(epic1.getId(), 1, "Съездить в деревню", "Взять с собой:", Taskstatus.NEW);
+        Epic updateEpic = new Epic
+                (epic1.getId(), 1, "Съездить в деревню", "Взять с собой:");
         updateEpic = taskManager.updateEpic(updateEpic);
         System.out.println(updateEpic);
 
@@ -126,6 +135,7 @@ public class Main {
         System.out.println();
         System.out.println("Проверка: Вывод всех Epic");
         System.out.println(taskManager.allEpics());
+        System.out.println(taskManager.allEpics());
 
         System.out.println();
         System.out.println("Проверка: Удаление Epic по id");
@@ -136,6 +146,7 @@ public class Main {
         System.out.println("Проверка: Вывод всех Epic");
         System.out.println(taskManager.allEpics());
 
+
         System.out.println();
         System.out.println("Проверка: Удаление всех Epic");
         taskManager.deleteEpic();
@@ -145,8 +156,5 @@ public class Main {
         System.out.println("Проверка всех задач окончена!");
         System.out.println("Спасибо за уделённое время! Продуктивной работы!");
 
-
     }
-
-
 }

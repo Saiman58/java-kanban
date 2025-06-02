@@ -91,55 +91,6 @@ public class Main {
         System.out.println("--------------------------");
 
         System.out.println();
-        System.out.println("Проверка: Создание Subtask1");
-        Subtask subtask1 = new Subtask("Новый Subtask1", "Описание Subtask1", Taskstatus.NEW, 1);
-        taskManager.addNewSubtask(subtask1);
-        System.out.println(subtask1);
-
-        System.out.println();
-        System.out.println("Проверка: Создание Subtask2");
-        Subtask subtask2 = new Subtask("Новый Subtask2", "Описание Subtask2", Taskstatus.NEW, 2);
-        taskManager.addNewSubtask(subtask2);
-        System.out.println(subtask2);
-
-        System.out.println();
-        System.out.println("Проверка: Создание Subtask3");
-        Subtask subtask3 = new Subtask(" Subtask3", " описание Subtask3", Taskstatus.NEW, 1);
-        taskManager.addNewSubtask(subtask3);
-        System.out.println(subtask3);
-
-        System.out.println();
-        System.out.println("Проверка: Обновления Subtask");
-        Subtask subtaskForUpdate = new Subtask(subtask1.getId(), 1, "Обновление подзадачи1", "Обновление описания подзадачи2", Taskstatus.IN_PROGRESS);
-        subtaskForUpdate = taskManager.updateSubtask(subtaskForUpdate);
-        System.out.println(subtaskForUpdate);
-
-        System.out.println();
-        System.out.println("Проверка: Просмотр Subtask по id");
-        System.out.println(taskManager.getSubtasksForId(subtask3.getId()));
-
-        System.out.println();
-        System.out.println("Проверка: Просмотр всех Subtask");
-        System.out.println(taskManager.allSubtasks());
-
-        System.out.println();
-        System.out.println("Проверка: Удаление Subtask по id");
-        Subtask deleteSubtask = taskManager.deleteSubtask(subtask2.getId());
-        System.out.println(deleteSubtask);
-
-        System.out.println();
-        System.out.println("Проверка: Просмотр всех Subtask");
-        System.out.println(taskManager.allSubtasks());
-
-        System.out.println();
-        System.out.println("Очистка всех Subtask");
-        taskManager.deleteAllSubtask();
-        System.out.println(taskManager.allSubtasks());
-
-
-        System.out.println("--------------------------");
-
-        System.out.println();
         System.out.println("Проверка: Создание Epic1");
         Epic epic1 = new Epic("Отпуск", "Купить билеты");
         taskManager.creatingEpic(epic1);
@@ -159,8 +110,14 @@ public class Main {
         System.out.println(updateEpic);
 
         System.out.println();
+        System.out.println("Проверка: Создание Epic3");
+        Epic epic3 = new Epic("Имя", "Описание");
+        taskManager.creatingEpic(epic3);
+        System.out.println(epic3);
+
+        System.out.println();
         System.out.println("Проверка: Создание Subtask4 в Epic");
-        Subtask subtask4 = new Subtask(" Subtask4", " описание Subtask4", Taskstatus.NEW, 3);
+        Subtask subtask4 = new Subtask(" Subtask4", " описание Subtask4", Taskstatus.NEW, 8);
         taskManager.addNewSubtask(subtask4);
         System.out.println(subtask4);
         System.out.println(epic1);
@@ -190,6 +147,60 @@ public class Main {
         System.out.println("Проверка: Удаление всех Epic");
         taskManager.deleteEpic();
         System.out.println(taskManager.allEpics());
+
+        System.out.println("--------------------------");
+
+        System.out.println();
+        System.out.println("Проверка: Создание Epic4");
+        Epic epic4 = new Epic("Имя", "Описание");
+        taskManager.creatingEpic(epic4);
+        System.out.println(epic4);
+
+        System.out.println();
+        System.out.println("Проверка: Создание Subtask1");
+        Subtask subtask1 = new Subtask("Новый Subtask1", "Описание Subtask1", Taskstatus.NEW, 10);
+        taskManager.addNewSubtask(subtask1);
+        System.out.println(subtask1);
+
+        System.out.println();
+        System.out.println("Проверка: Создание Epic5");
+        Epic epic5 = new Epic("Имя", "Описание");
+        taskManager.creatingEpic(epic5);
+        System.out.println(epic5);
+
+        System.out.println();
+        System.out.println("Проверка: Создание Subtask2");
+        Subtask subtask2 = new Subtask("Новый Subtask2", "Описание Subtask2", Taskstatus.NEW, 12);
+        taskManager.addNewSubtask(subtask2);
+        System.out.println(subtask2);
+
+        System.out.println();
+        System.out.println("Проверка: Обновления Subtask");
+        Subtask subtaskForUpdate = new Subtask(subtask1.getId(), 1, "Обновление подзадачи1", "Обновление описания подзадачи2", Taskstatus.IN_PROGRESS);
+        subtaskForUpdate = taskManager.updateSubtask(subtaskForUpdate);
+        System.out.println(subtaskForUpdate);
+
+        System.out.println();
+        System.out.println("Проверка: Просмотр Subtask по id");
+        System.out.println(taskManager.getSubtasksForId(subtask2.getId()));
+
+        System.out.println();
+        System.out.println("Проверка: Просмотр всех Subtask");
+        System.out.println(taskManager.allSubtasks());
+
+        System.out.println();
+        System.out.println("Проверка: Удаление Subtask по id");
+        Subtask deleteSubtask = taskManager.deleteSubtask(subtask2.getId());
+        System.out.println(deleteSubtask);
+
+        System.out.println();
+        System.out.println("Проверка: Просмотр всех Subtask");
+        System.out.println(taskManager.allSubtasks());
+
+        System.out.println();
+        System.out.println("Очистка всех Subtask");
+        taskManager.deleteAllSubtask();
+        System.out.println(taskManager.allSubtasks());
 
         System.out.println("--------------------------");
         System.out.println("Проверка всех задач окончена!");

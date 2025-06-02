@@ -62,7 +62,6 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
         Epic epic = epics.get(subtask.getIdEpic());
         if (epic == null) {
             throw new IllegalArgumentException("Для данной подзадачи не найден Epic!");
-
         }
         subtask.setId(getNewId());
         subtasks.put(subtask.getId(), subtask);

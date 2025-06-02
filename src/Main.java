@@ -1,3 +1,5 @@
+import manager.Managers;
+import manager.TaskManager;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -7,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
         System.out.println();
         System.out.println("Проверка: Создание таски1");
@@ -22,14 +24,53 @@ public class Main {
         System.out.println(task2);
 
         System.out.println();
+        System.out.println("Проверка: Создание таски3");
+        Task task3 = new Task("Таска3", "Описание таски3", Taskstatus.NEW);
+        taskManager.createTask(task3);
+        System.out.println(task3);
+
+        System.out.println();
+        System.out.println("Проверка: Создание таски4");
+        Task task4 = new Task("Таска4", "Описание таски4", Taskstatus.NEW);
+        taskManager.createTask(task4);
+        System.out.println(task4);
+
+        System.out.println();
+        System.out.println("Проверка: Создание таски5");
+        Task task5 = new Task("Таска5", "Описание таски5", Taskstatus.NEW);
+        taskManager.createTask(task5);
+        System.out.println(task5);
+
+        System.out.println();
         System.out.println("Проверка: Обновления таски");
-        Task taskForUpdate = new Task(task1.getId(), "Новое имя", task1.getDescription() + ", молоко", Taskstatus.IN_PROGRESS);
+        Task taskForUpdate = new Task(task1.getId(), "Новое имя", task1.getDescription() + ", молоко, хлеб", Taskstatus.IN_PROGRESS);
         taskForUpdate = taskManager.updateTask(taskForUpdate);
         System.out.println(taskForUpdate);
 
         System.out.println();
-        System.out.println("Проверка: Получение таски по id");
+        System.out.println("Проверка: Просмотр таски1 по id");
         System.out.println(taskManager.getTask(task1.getId()));
+
+        System.out.println();
+        System.out.println("Проверка: Просмотр таски5 по id");
+        System.out.println(taskManager.getTask(task5.getId()));
+
+        System.out.println("--------------------------");
+        System.out.println("Проверка: вывода истории просмотров");
+        System.out.println(taskManager.getHistory());
+        System.out.println();
+
+        System.out.println();
+        System.out.println("Проверка: Просмотр таски3 по id");
+        System.out.println(taskManager.getTask(task3.getId()));
+
+        System.out.println();
+        System.out.println("Проверка: Просмотр таски4 по id");
+        System.out.println(taskManager.getTask(task4.getId()));
+
+        System.out.println();
+        System.out.println("Проверка: Просмотр таски5 по id");
+        System.out.println(taskManager.getTask(task5.getId()));
 
         System.out.println();
         System.out.println("Проверка: Удаление таски по id");
@@ -74,11 +115,11 @@ public class Main {
         System.out.println(subtaskForUpdate);
 
         System.out.println();
-        System.out.println("Проверка: Получение таски по id");
-        System.out.println(taskManager.getSubtasksForId(subtask1.getId()));
+        System.out.println("Проверка: Просмотр Subtask по id");
+        System.out.println(taskManager.getSubtasksForId(subtask3.getId()));
 
         System.out.println();
-        System.out.println("Проверка: Вывод всех Subtask");
+        System.out.println("Проверка: Просмотр всех Subtask");
         System.out.println(taskManager.allSubtasks());
 
         System.out.println();
@@ -87,15 +128,13 @@ public class Main {
         System.out.println(deleteSubtask);
 
         System.out.println();
-        System.out.println("Проверка: Вывод всех Subtask");
+        System.out.println("Проверка: Просмотр всех Subtask");
         System.out.println(taskManager.allSubtasks());
 
         System.out.println();
         System.out.println("Очистка всех Subtask");
         taskManager.deleteAllSubtask();
         System.out.println(taskManager.allSubtasks());
-
-
 
 
         System.out.println("--------------------------");
@@ -127,7 +166,7 @@ public class Main {
         System.out.println(epic1);
 
         System.out.println();
-        System.out.println("Проверка: Получение Epic по id");
+        System.out.println("Проверка: Просмотр Epic по id");
         System.out.println(taskManager.getEpic(epic1.getId()));
         System.out.println();
         System.out.println(taskManager.getEpic(epic2.getId()));
@@ -156,5 +195,11 @@ public class Main {
         System.out.println("Проверка всех задач окончена!");
         System.out.println("Спасибо за уделённое время! Продуктивной работы!");
 
+        System.out.println("--------------------------");
+        System.out.println("Проверка: вывода истории просмотров");
+        System.out.println(taskManager.getHistory());
+        System.out.println();
+
     }
+
 }

@@ -206,7 +206,7 @@ public class InMemoryHistoryManagerTest {
 
         // размер истории
         history = manager.getHistory();
-         // добавлена ли задача1
+        // добавлена ли задача1
         assertTrue(history.contains(task1));
     }
 

@@ -26,9 +26,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         Node node = nodes.get(taskId);
         if (node == null) {
             return;
-        } else if (node == first){
-            first = first.next;
-        } else if (node == last){
+        } else if (node == first) first = first.next;
+        else if (node == last) {
             last = last.prew;
         } else {
             node.prew.next = node.next;

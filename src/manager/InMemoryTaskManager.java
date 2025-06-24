@@ -161,7 +161,7 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
         return historyManager.getHistory();
     }
 
-    private void addHistory(Task task){
+    private void addHistory(Task task) {
         historyManager.add(task);
     }
 

@@ -57,6 +57,7 @@ public class InMemoryHistoryManagerTest {
                 epic.getId());
         boolean added = taskManager.addNewSubtask(subtask) != null;
         assertTrue(added, "Subtask не может быть Epic");
+
     }
 
     @Test
@@ -136,5 +137,82 @@ public class InMemoryHistoryManagerTest {
         assertEquals(originalTask.getDescription(), previousVersion.getDescription(), "Описание задачи изменилось.");
         assertEquals(originalTask.getStatus(), previousVersion.getStatus(), "Статус задачи изменился.");
     }
+
+    @Test
+    public void testAddTaskToHistory() { //Добавления задачи в историю
+        InMemoryHistoryManager manager = new InMemoryHistoryManager();
+        Task task = new Task("Test task", "Description", Taskstatus.NEW);
+        manager.add(task);
+        assertTrue(manager.getHistory().contains(task));
+    }
+
+    @Test
+    public void testRemoveTaskFromHistory() { //Удаление задачи из истории
+        InMemoryHistoryManager manager = new InMemoryHistoryManager();
+        Task task = new Task("Another test task", "Description", Taskstatus.NEW);
+        manager.add(task);
+        manager.remove(task);
+        assertFalse(manager.getHistory().contains(task));
+    }
+
+    @Test
+    public void testRemoveFirstNode() { //Удаление задач из истории
+        InMemoryHistoryManager manager = new InMemoryHistoryManager();
+
+        // Создаем несколько задач
+        Task task1 = new Task("Task1", "Task 1", Taskstatus.NEW);
+        Task task2 = new Task("Task2", "Task 1", Taskstatus.NEW);
+        Task task3 = new Task("Task3", "Task 1", Taskstatus.NEW);
+
+        // Добавляем задачи в менеджер
+        manager.add(task1);
+        manager.add(task2);
+        manager.add(task3);
+
+        // Проверяем что задачи добавлены
+        assertEquals(3, manager.getHistory().size());
+        assertTrue(manager.getHistory().contains(task1));
+        assertTrue(manager.getHistory().contains(task2));
+        assertTrue(manager.getHistory().contains(task3));
+
+        // Удаление задач
+        manager.remove(task1);
+        manager.remove(task3);
+
+        // Проверяем что задачи удалены
+        assertEquals(1, manager.getHistory().size());
+        assertFalse(manager.getHistory().contains(task1));
+        assertTrue(manager.getHistory().contains(task2));
+        assertFalse(manager.getHistory().contains(task3));
+    }
+
+    @Test
+    public void testRepeatedViews() {
+        InMemoryHistoryManager manager = new InMemoryHistoryManager();
+
+        Task task1 = new Task("Task1", "Task 1", Taskstatus.NEW);
+        Task task2 = new Task("Task1", "Task 1", Taskstatus.NEW);
+
+        manager.add(task1);
+        manager.add(task2);
+
+        List<Task> history = manager.getHistory();
+        assertEquals(2, history.size());
+        assertTrue(history.contains(task1));
+        assertTrue(history.contains(task2));
+
+        // Повторное добавление задачи
+        manager.add(task1);
+
+        // размер истории
+        history = manager.getHistory();
+         // добавлена ли задача1
+        assertTrue(history.contains(task1));
+    }
+
+
 }
+
+
+
 

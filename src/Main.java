@@ -104,8 +104,7 @@ public class Main {
 
         System.out.println();
         System.out.println("Проверка: Обновления Epic1");
-        Epic updateEpic = new Epic
-                (epic1.getId(), 1, "Съездить в деревню", "Взять с собой:");
+        Epic updateEpic = new Epic(epic1.getId(), 1, "Съездить в деревню", "Взять с собой:");
         updateEpic = taskManager.updateEpic(updateEpic);
         System.out.println(updateEpic);
 

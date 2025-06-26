@@ -43,11 +43,18 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
 
     @Override
     public Task deleteTask(int id) { //удаление Task по id
-        return tasks.remove(id);
+        Task task = tasks.remove(id);
+        if (task != null) {
+            historyManager.remove(id);
+        }
+        return task;
     }
 
     @Override
     public void deleteTasks() { // удаление всех Task
+        for (Integer id : new ArrayList<>(tasks.keySet())) {
+            historyManager.remove(id);
+        }
         tasks.clear();
     }
 
@@ -100,12 +107,17 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
             if (epic != null) {
                 epic.updateStatus(); // Обновляем статус Epic
             }
+            historyManager.remove(idSubtask);
         }
         return subtask;
     }
 
     @Override
     public void deleteAllSubtask() { // удаление всех subtask
+        for (Subtask subtask : new ArrayList<>(subtasks.values())) {
+            historyManager.remove(subtask.getId());
+        }
+
         for (Epic epic : epics.values()) {
             epic.getSubtasks().clear();
             epic.updateStatus();
@@ -145,6 +157,7 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
         if (epic != null) {
             for (Subtask subtask : epic.getSubtasks()) {
                 subtasks.remove(subtask.getId());
+                historyManager.remove(subtask.getId());
             }
         }
         return epic;
@@ -152,6 +165,9 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
 
     @Override
     public void deleteEpic() { // удаление всех Epic
+        for (Epic epic : new ArrayList<>(epics.values())) {
+            historyManager.remove(epic.getId());
+        }
         epics.clear();
         subtasks.clear();
     }
@@ -161,7 +177,7 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
         return historyManager.getHistory();
     }
 
-    private void addHistory(Task task){
+    private void addHistory(Task task) {
         historyManager.add(task);
     }
 

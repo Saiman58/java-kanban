@@ -13,6 +13,11 @@ public class Subtask extends Task {
         this.idEpic = idEpic;
     }
 
+    @Override
+    public TaskType getType() {  //переопределение на проверку типа задачи
+        return TaskType.SUBTASK;
+    }
+
     public int getIdEpic() {
         return idEpic;
     }

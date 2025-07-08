@@ -44,6 +44,10 @@ public class Task {
         this.taskstatus = taskstatus;
     }
 
+    public TaskType getType() { //проверка на тип задачи
+        return TaskType.TASK;
+    }
+
     @Override
     public String toString() {
         return "Task{" +

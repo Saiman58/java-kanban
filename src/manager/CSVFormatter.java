@@ -1,9 +1,8 @@
 package manager;
 
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
-import tasks.Taskstatus;
+import tasks.*;
+
+
 
 public class CSVFormatter {
 
@@ -14,13 +13,13 @@ public class CSVFormatter {
     public static String toString(Task task) {
         StringBuilder sb = new StringBuilder();
         sb.append(task.getId()).append(","); //id
-        if (task instanceof Subtask) {
+        if (task.getType() == TaskType.SUBTASK) {
             Subtask subtask = (Subtask) task;
             sb.append("SUBTASK,").append(subtask.getName()).append(",")
                     .append(subtask.getStatus()).append(",")
                     .append(subtask.getDescription()).append(",")
                     .append(subtask.getIdEpic());
-        } else if (task instanceof Epic) {
+        } else if (task.getType() == TaskType.EPIC) {
             Epic epic = (Epic) task;
             sb.append("EPIC,").append(epic.getName()).append(",")
                     .append(epic.getStatus()).append(",")
@@ -48,6 +47,8 @@ public class CSVFormatter {
         String[] parts = line.split(",");
         if (parts.length < 5) return null; // Неверный формат
 
+
+
         int id = Integer.parseInt(parts[0]);
         String type = parts[1];
         String name = parts[2];
@@ -65,6 +66,7 @@ public class CSVFormatter {
             default:
                 return null; // Неизвестный тип
         }
+
     }
 }
 

@@ -1,5 +1,7 @@
 package manager;
 
+import exceptions.ManagerSaveException;
+
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -16,7 +18,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager taskManager = new FileBackedTaskManager(file);
 
         //наполнить данными из файла
@@ -36,14 +38,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     if (task != null) {
                         taskManager.getTask(task.getId());
                         // Обновление текущего максимального ID, если необходимо
-                        if (task.getId() > generatorId) {
-                            generatorId = task.getId();
+                        if (task.getId() > taskManager.generatorId) {
+                            taskManager.generatorId = task.getId();
                         }
                     }
                 }
             }
         } catch (IOException e) {
-            System.err.println("Ошибка при чтении файла: " + e.getMessage());
+            throw new ManagerSaveException("Ошибка при чтении файла: " + e.getMessage());
         }
 
         return taskManager;
@@ -116,7 +118,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             writer.write(CSVFormatter.toStringHistory(historyManager));
             writer.newLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ManagerSaveException("Ошибка при записи в  файл: " + e.getMessage());
+
 
         }
     }

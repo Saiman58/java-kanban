@@ -16,6 +16,11 @@ public class Epic extends Task {
         this.subtasks = new ArrayList<>();
     }
 
+    @Override
+    public TaskType getType() {   //переопределение на проверку типа задачи
+        return TaskType.EPIC;
+    }
+
     public void addSubtask(Subtask subtask) {
         subtasks.add(subtask);
     }
@@ -41,6 +46,7 @@ public class Epic extends Task {
             setStatus(Taskstatus.IN_PROGRESS);
         }
     }
+
 
     @Override
     public String toString() {

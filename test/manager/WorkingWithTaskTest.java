@@ -45,16 +45,16 @@ public class WorkingWithTaskTest {
     public void testAddingAndFindingTasks() {
 
         Task task = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
-        Epic epic = new Epic("Epic1", "Description", LocalDateTime.now(), Duration.ofHours(5));
-        Subtask subtask = new Subtask("Subtask1", "описание Subtask1", Taskstatus.NEW, epic.getId(),
+        Epic epic1 = new Epic("Epic1", "Description", LocalDateTime.now(), Duration.ofHours(5));
+        taskManager.addNewgEpic(epic1);
+        Subtask subtask = new Subtask("Subtask1", "описание Subtask1", Taskstatus.NEW, epic1.getId(),
                 LocalDateTime.now(), Duration.ofHours(2));
 
         taskManager.addNewTask(task);
-        taskManager.addNewgEpic(epic);
         taskManager.addNewSubtask(subtask);
 
         assertNotNull(taskManager.getTask(task.getId()), "Задача не найдена по ID");
-        assertNotNull(taskManager.getEpic(epic.getId()), "Эпик не найден по ID");
+        assertNotNull(taskManager.getEpic(epic1.getId()), "Эпик не найден по ID");
         assertNotNull(taskManager.getSubtasksForId(subtask.getId()), "Подзадача не найдена по ID");
     }
 

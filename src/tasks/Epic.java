@@ -56,7 +56,6 @@ public class Epic extends Task {
         }
     }
 
-
     // Методы для расчёта duration, startTime и endTime
     public Duration calculateDuration() {
         Duration totalDuration = Duration.ZERO;

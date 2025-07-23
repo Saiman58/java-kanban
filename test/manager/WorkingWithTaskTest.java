@@ -7,6 +7,8 @@ import tasks.Subtask;
 import tasks.Task;
 import tasks.Taskstatus;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,16 +25,16 @@ public class WorkingWithTaskTest {
 
     @Test
     public void testCreateTask() { //Проверка: на наличие задачи
-        Task task1 = new Task("Таска1", "Описание таски1", Taskstatus.NEW);
-        taskManager.createTask(task1);
+        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        taskManager.addNewTask(task1);
         List<Task> tasks1 = taskManager.allTasks();
         assertEquals(1, tasks1.size());
     }
 
     @Test
     public void addNewTaskAndFindId() { //Проверка: поиск задач
-        Task task2 = new Task("Таска2", "Описание таски2", Taskstatus.NEW);
-        taskManager.createTask(task2);
+        Task task2 = new Task("Task", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        taskManager.addNewTask(task2);
         final int taskId = taskManager.getTask(task2.getId()).getId();
         final Task savedTask = taskManager.getTask(taskId);
         assertNotNull(savedTask, "Задача не найдена.");
@@ -42,12 +44,13 @@ public class WorkingWithTaskTest {
     @Test
     public void testAddingAndFindingTasks() {
 
-        Task task = new Task("Задача", "Описание задачи", Taskstatus.NEW);
-        Epic epic = new Epic("Эпик", "Описание эпика");
-        Subtask subtask = new Subtask("Подзадача", "Описание подзадачи", Taskstatus.IN_PROGRESS, 2);
+        Task task = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        Epic epic = new Epic("Epic1", "Description", LocalDateTime.now(), Duration.ofHours(5));
+        Subtask subtask = new Subtask("Subtask1", "описание Subtask1", Taskstatus.NEW, epic.getId(),
+                LocalDateTime.now(), Duration.ofHours(2));
 
-        taskManager.createTask(task);
-        taskManager.creatingEpic(epic);
+        taskManager.addNewTask(task);
+        taskManager.addNewgEpic(epic);
         taskManager.addNewSubtask(subtask);
 
         assertNotNull(taskManager.getTask(task.getId()), "Задача не найдена по ID");
@@ -57,13 +60,13 @@ public class WorkingWithTaskTest {
 
     @Test
     public void testUniqueTaskIds() {
-        Task task1 = new Task("Task 1", "Описание Task 1", Taskstatus.NEW);
-        Task task2 = new Task("Task 2", "Описание Task 2", Taskstatus.NEW);
-        Task task3 = new Task("Task 3", "Описание Task 3", Taskstatus.NEW);
+        Task task1 = new Task("Task1", "Описание1", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        Task task2 = new Task("Task1", "Описание2", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        Task task3 = new Task("Task1", "Описание3", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
 
-        taskManager.createTask(task1);
-        taskManager.createTask(task2);
-        taskManager.createTask(task3);
+        taskManager.addNewTask(task1);
+        taskManager.addNewTask(task2);
+        taskManager.addNewTask(task3);
 
         int id1 = task1.getId();
         int id2 = task2.getId();
@@ -76,9 +79,9 @@ public class WorkingWithTaskTest {
 
     @Test
     public void testTaskImmutabilityOnAdd() {
-        Task originalTask = new Task("Task", "Описание Task", Taskstatus.NEW);
+        Task originalTask = new Task("Task1", "Описание1", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
 
-        taskManager.createTask(originalTask);
+        taskManager.addNewTask(originalTask);
 
         Task retrievedTask = taskManager.getTask(originalTask.getId());
 
@@ -91,12 +94,14 @@ public class WorkingWithTaskTest {
     @Test
     public void testTaskVersioningInHistoryManager() {
 
-        Task originalTask = new Task("Таска", "Описание таски", Taskstatus.NEW);
+        Task originalTask = new Task("Task1", "Описание1", Taskstatus.NEW,
+                LocalDateTime.now(), Duration.ZERO);
 
-        taskManager.createTask(originalTask);
+        taskManager.addNewTask(originalTask);
 
-        Task updatedTask = new Task(originalTask.getId(), "Обновленная таска", "Новое описание",
-                Taskstatus.IN_PROGRESS);
+        Task updatedTask = new Task(originalTask.getId(), "Новое имя таски", "Обновленная таска",
+                Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+
         taskManager.updateTask(updatedTask);
 
         List<Task> history = taskManager.getHistory();

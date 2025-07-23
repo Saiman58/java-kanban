@@ -4,12 +4,15 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
     //методы для Task
-    Task createTask(Task task);
+    Task addNewTask(Task task);
 
     Task updateTask(Task task);
 
@@ -20,6 +23,7 @@ public interface TaskManager {
     void deleteTasks();
 
     ArrayList<Task> allTasks();
+
 
     //методы для Subtask
     Subtask addNewSubtask(Subtask subtask);
@@ -35,7 +39,7 @@ public interface TaskManager {
     void deleteAllSubtask();
 
     //методы для Epic
-    Epic creatingEpic(Epic epic);
+    Epic addNewgEpic(Epic epic);
 
     Epic updateEpic(Epic epic);
 
@@ -49,4 +53,11 @@ public interface TaskManager {
 
     //История задач
     List<Task> getHistory();
+
+    // Время/ Сортировка по времени
+    LocalDateTime getEndTime(LocalDateTime startTime, Duration duration);
+
+    public Set<Task> getPrioritizedTasks();
+
+
 }

@@ -4,9 +4,9 @@ import tasks.Epic;
 import tasks.Task;
 import tasks.Subtask;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {  //Диспетчер задач в памяти
     protected HashMap<Integer, Task> tasks = new HashMap<>();
@@ -17,7 +17,10 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
 
     //методы для Task
     @Override
-    public Task createTask(Task task) { //создание Task
+    public Task addNewTask(Task task) { //создание Task
+        if (hasOverlappingTasks(task)){
+            throw new IllegalArgumentException("Задача пересекается с существующими задачами");
+        }
         task.setId(getNewId());
         tasks.put(task.getId(), task);
         addHistory(task);
@@ -30,6 +33,9 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
 
     @Override
     public Task updateTask(Task task) { //обновление Task
+        if (hasOverlappingTasks(task)) {
+            throw new IllegalArgumentException("Обновлённая задача пересекается с существующими задачами!");
+        }
         tasks.put(task.getId(), task);
         return task;
     }
@@ -52,9 +58,7 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
 
     @Override
     public void deleteTasks() { // удаление всех Task
-        for (Integer id : new ArrayList<>(tasks.keySet())) {
-            historyManager.remove(id);
-        }
+        tasks.keySet().forEach(historyManager::remove); //рефакторинг метода (замена на Stream API)
         tasks.clear();
     }
 
@@ -63,9 +67,18 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
         return new ArrayList<>(tasks.values());
     }
 
+    @Override
+    public LocalDateTime getEndTime(LocalDateTime startTime, Duration duration) {
+        return startTime.plus(duration);
+    }
+
+
     //методы для Subtask
     @Override
     public Subtask addNewSubtask(Subtask subtask) { //создание Subtask
+        if (hasOverlappingTasks(subtask)){
+            throw new IllegalArgumentException("Подзадача пересекается с существующими задачами");
+        }
         Epic epic = epics.get(subtask.getIdEpic());
         if (epic == null) {
             throw new IllegalArgumentException("Для данной подзадачи не найден Epic!");
@@ -74,6 +87,10 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
         subtasks.put(subtask.getId(), subtask);
         epic.addSubtask(subtask);
         epic.updateStatus(); // обновляем статус Subtask
+        Duration totalDuration = epic.calculateDuration();
+        epic.setDuration(totalDuration); // расчёт продолжительности времени Epic
+        LocalDateTime calculateStartTime = epic.calculateStartTime();
+        epic.setStartTime(calculateStartTime); // расчёт старта времени выполнения Epic
         return subtask;
     }
 
@@ -91,10 +108,17 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
 
     @Override
     public Subtask updateSubtask(Subtask subtask) { // обновление Subtask
+        if (hasOverlappingTasks(subtask)){
+            throw new IllegalArgumentException("Подзадача пересекается с существующими задачами");
+        }
         subtasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getIdEpic());
         if (epic != null) {
             epic.updateStatus(); // обновляем статус Epic
+            Duration totalDuration = epic.calculateDuration();
+            epic.setDuration(totalDuration); // расчёт продолжительности времени Epic
+            LocalDateTime calculateStartTime = epic.calculateStartTime();
+            epic.setStartTime(calculateStartTime); // расчёт старта времени выполнения Epic
         }
         return subtask;
     }
@@ -106,6 +130,10 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
             Epic epic = epics.get(subtask.getIdEpic());
             if (epic != null) {
                 epic.updateStatus(); // Обновляем статус Epic
+                Duration totalDuration = epic.calculateDuration();
+                epic.setDuration(totalDuration); // расчёт продолжительности времени Epic
+                LocalDateTime calculateStartTime = epic.calculateStartTime();
+                epic.setStartTime(calculateStartTime); // расчёт старта времени выполнения Epic
             }
             historyManager.remove(idSubtask);
         }
@@ -121,13 +149,17 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
         for (Epic epic : epics.values()) {
             epic.getSubtasks().clear();
             epic.updateStatus();
+            Duration totalDuration = epic.calculateDuration();
+            epic.setDuration(totalDuration); // расчёт продолжительности времени Epic
+            LocalDateTime calculateStartTime = epic.calculateStartTime();
+            epic.setStartTime(calculateStartTime); // расчёт старта времени выполнения Epic
         }
         subtasks.clear();
     }
 
     //методы для Epic
     @Override
-    public Epic creatingEpic(Epic epic) { //создание Epic
+    public Epic addNewgEpic(Epic epic) { //создание Epic
         epic.setId(getNewId());
         epics.put(epic.getId(), epic);
         return epic;
@@ -171,6 +203,41 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
         epics.clear();
         subtasks.clear();
     }
+
+    public Set<Task> getPrioritizedTasks() { // сортировка задач
+        List<Task> prioritizedTasks = new ArrayList<>();
+        //TreeMap для хранения задач по startTime
+        Map<LocalDateTime, List<Task>> tasksByStartTime = new TreeMap<>();
+
+        //добавляем все задачи и подзадачи в TreeMap
+        for (Task task : tasks.values()) {
+            LocalDateTime startTime = task.getStartTime();
+            tasksByStartTime.putIfAbsent(startTime, new ArrayList<>());
+            tasksByStartTime.get(startTime).add(task);
+        }
+        //задачи в порядке приоритета
+        for (List<Task> taskList : tasksByStartTime.values()) {
+            prioritizedTasks.addAll(taskList);
+        }
+        return new HashSet<>(prioritizedTasks); // Преобразуем список в множество
+    }
+
+    public boolean isOverlapping(Task task1, Task task2) {
+        LocalDateTime start1 = task1.getStartTime();
+        LocalDateTime end1 = start1.plus(task1.getDuration());
+        LocalDateTime start2 = task2.getStartTime();
+        LocalDateTime end2 = start2.plus(task2.getDuration());
+
+        return !(end1.isBefore(start2) || end2.isBefore(start1));
+    }
+
+    public boolean hasOverlappingTasks(Task newTask) {
+        return tasks.values().stream()
+                .anyMatch(task -> isOverlapping(newTask, task));
+    }
+
+
+
 
     @Override
     public List<Task> getHistory() {

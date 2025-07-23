@@ -18,7 +18,7 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
     //методы для Task
     @Override
     public Task addNewTask(Task task) { //создание Task
-        if (hasOverlappingTasks(task)){
+        if (hasOverlappingTasks(task)) {
             throw new IllegalArgumentException("Задача пересекается с существующими задачами");
         }
         task.setId(getNewId());
@@ -76,7 +76,7 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
     //методы для Subtask
     @Override
     public Subtask addNewSubtask(Subtask subtask) { //создание Subtask
-        if (hasOverlappingTasks(subtask)){
+        if (hasOverlappingTasks(subtask)) {
             throw new IllegalArgumentException("Подзадача пересекается с существующими задачами");
         }
         Epic epic = epics.get(subtask.getIdEpic());
@@ -108,7 +108,7 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
 
     @Override
     public Subtask updateSubtask(Subtask subtask) { // обновление Subtask
-        if (hasOverlappingTasks(subtask)){
+        if (hasOverlappingTasks(subtask)) {
             throw new IllegalArgumentException("Подзадача пересекается с существующими задачами");
         }
         subtasks.put(subtask.getId(), subtask);
@@ -235,8 +235,6 @@ public class InMemoryTaskManager implements TaskManager {  //Диспетчер 
         return tasks.values().stream()
                 .anyMatch(task -> isOverlapping(newTask, task));
     }
-
-
 
 
     @Override

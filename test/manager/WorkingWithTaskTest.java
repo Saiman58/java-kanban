@@ -25,7 +25,8 @@ public class WorkingWithTaskTest {
 
     @Test
     public void testCreateTask() { //Проверка: на наличие задачи
-        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(),
+                Duration.ZERO);
         taskManager.addNewTask(task1);
         List<Task> tasks1 = taskManager.allTasks();
         assertEquals(1, tasks1.size());
@@ -33,7 +34,8 @@ public class WorkingWithTaskTest {
 
     @Test
     public void addNewTaskAndFindId() { //Проверка: поиск задач
-        Task task2 = new Task("Task", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        Task task2 = new Task("Task", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(),
+                Duration.ZERO);
         taskManager.addNewTask(task2);
         final int taskId = taskManager.getTask(task2.getId()).getId();
         final Task savedTask = taskManager.getTask(taskId);
@@ -44,7 +46,8 @@ public class WorkingWithTaskTest {
     @Test
     public void testAddingAndFindingTasks() {
 
-        Task task = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        Task task = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(),
+                Duration.ZERO);
         Epic epic1 = new Epic("Epic1", "Description", LocalDateTime.now(), Duration.ofHours(5));
         taskManager.addNewgEpic(epic1);
         Subtask subtask = new Subtask("Subtask1", "описание Subtask1", Taskstatus.NEW, epic1.getId(),
@@ -60,7 +63,8 @@ public class WorkingWithTaskTest {
 
     @Test
     public void testUniqueTaskIds() {
-        Task task1 = new Task("Task1", "Описание1", Taskstatus.NEW, LocalDateTime.now(), Duration.ofHours(1));
+        Task task1 = new Task("Task1", "Описание1", Taskstatus.NEW, LocalDateTime.now(),
+                Duration.ofHours(1));
         Task task2 = new Task("Task2", "Описание2", Taskstatus.NEW, LocalDateTime.now().plusHours(4),
                 Duration.ofHours(1));
         Task task3 = new Task("Task3", "Описание3", Taskstatus.NEW, LocalDateTime.now().plusHours(6),
@@ -81,7 +85,8 @@ public class WorkingWithTaskTest {
 
     @Test
     public void testTaskImmutabilityOnAdd() {
-        Task originalTask = new Task("Task1", "Описание1", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        Task originalTask = new Task("Task1", "Описание1", Taskstatus.NEW, LocalDateTime.now(),
+                Duration.ZERO);
 
         taskManager.addNewTask(originalTask);
 

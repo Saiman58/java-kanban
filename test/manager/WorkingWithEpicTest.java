@@ -72,9 +72,11 @@ public class WorkingWithEpicTest {
 
     @Test
     public void testAllSubtasksInProgress() { // ЕСЛИ все Subtask со статусом IN_PROGRESS, epic должен быть IN_PROGRESS
-        Subtask subtask1 = new Subtask("Subtask1", "описание Subtask1", Taskstatus.IN_PROGRESS, epic.getId(),
+        Subtask subtask1 = new Subtask("Subtask1", "описание Subtask1", Taskstatus.IN_PROGRESS,
+                epic.getId(),
                 LocalDateTime.now(), Duration.ofHours(2));
-        Subtask subtask2 = new Subtask("Subtask2", "описание Subtask2", Taskstatus.IN_PROGRESS, epic.getId(),
+        Subtask subtask2 = new Subtask("Subtask2", "описание Subtask2", Taskstatus.IN_PROGRESS,
+                epic.getId(),
                 LocalDateTime.now(), Duration.ofHours(20));
 
         taskManager.addNewSubtask(subtask1);

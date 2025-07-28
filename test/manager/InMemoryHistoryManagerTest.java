@@ -23,7 +23,8 @@ public class InMemoryHistoryManagerTest {
     @Test
     public void testAddTaskToHistory() { //Добавления задачи в историю
         InMemoryHistoryManager manager = new InMemoryHistoryManager();
-        Task task = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        Task task = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(),
+                Duration.ZERO);
         manager.add(task);
         assertTrue(manager.getHistory().contains(task));
     }

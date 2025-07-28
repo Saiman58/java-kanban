@@ -7,8 +7,8 @@ public class Task {
     protected int id;
     private String name;
     private String description;
-    private LocalDateTime startTime;
-    private Duration duration;
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
     public Task(String name, String description, Taskstatus taskstatus, LocalDateTime startTime, Duration duration) {
         this.name = name;

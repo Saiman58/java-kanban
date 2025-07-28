@@ -41,10 +41,12 @@ public class InMemoryHistoryManagerTest {
     public void testRemoveFirstNode() {
         InMemoryTaskManager manager = new InMemoryTaskManager();
 
-        // Создаем несколько задач
-        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
-        Task task2 = new Task("Task2", "Описание2", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
-        Task task3 = new Task("Task1", "Описание3", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW,
+                LocalDateTime.now(), Duration.ofHours(1)); //  сейчас
+        Task task2 = new Task("Task2", "Описание2", Taskstatus.NEW,
+                LocalDateTime.now().plusHours(1).plusMinutes(30), Duration.ofHours(1)); //  через 1 час 30 минут
+        Task task3 = new Task("Task3", "Описание3", Taskstatus.NEW,
+                LocalDateTime.now().plusHours(3), Duration.ofHours(1)); //  через 3 часа
 
         // Добавляем задачи в менеджер
         manager.addNewTask(task1);
@@ -73,8 +75,11 @@ public class InMemoryHistoryManagerTest {
         InMemoryTaskManager taskManager = new InMemoryTaskManager();
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
-        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
-        Task task2 = new Task("Task2", "Описание2", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        // Обратите внимание на время начала задач
+        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(),
+                Duration.ofMinutes(10));
+        Task task2 = new Task("Task2", "Описание2", Taskstatus.NEW, LocalDateTime.now().plusMinutes(11),
+                Duration.ofMinutes(10));
 
         // Создаем задачи
         taskManager.addNewTask(task1);
@@ -90,7 +95,7 @@ public class InMemoryHistoryManagerTest {
         assertTrue(history.contains(task2));
 
         // Повторное добавление задачи
-        historyManager.add(task1);
+        historyManager.add(task1); // Добавляем task1 снова
 
         // Проверяем размер истории
         history = historyManager.getHistory();

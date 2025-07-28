@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
     private ArrayList<Subtask> subtasks;
-    private Duration duration;
-    LocalDateTime startTime;
+    private LocalDateTime endTime;
+
 
     public Epic(String name, String description, LocalDateTime startTime, Duration duration) {
         super(name, description, Taskstatus.NEW, startTime, duration);
@@ -57,13 +57,7 @@ public class Epic extends Task {
     }
 
     // Методы для расчёта duration, startTime и endTime
-    public Duration calculateDuration() {
-        Duration totalDuration = Duration.ZERO;
-        for (Subtask subtask : subtasks) {
-            totalDuration = totalDuration.plus(subtask.getDuration());
-        }
-        return totalDuration;
-    }
+
 
     public LocalDateTime calculateStartTime() {
         LocalDateTime minStartTime = null;
@@ -74,6 +68,27 @@ public class Epic extends Task {
         }
         return minStartTime;
     }
+
+    public Duration calculateDuration() {
+        Duration totalDuration = Duration.ZERO;
+        for (Subtask subtask : subtasks) {
+            totalDuration = totalDuration.plus(subtask.getDuration());
+        }
+        return totalDuration;
+    }
+
+    public LocalDateTime calculateEndTime() {
+        LocalDateTime maxEndTime = null;
+        for (Subtask subtask : subtasks) {
+            LocalDateTime subtaskEndTime = subtask.getStartTime().plus(subtask.getDuration());
+            if (maxEndTime == null || subtaskEndTime.isAfter(maxEndTime)) {
+                maxEndTime = subtaskEndTime;
+            }
+        }
+        return maxEndTime;
+    }
+
+
 
     @Override
     public Duration getDuration() {
@@ -93,6 +108,10 @@ public class Epic extends Task {
     @Override
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     @Override

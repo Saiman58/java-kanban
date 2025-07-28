@@ -60,9 +60,11 @@ public class WorkingWithTaskTest {
 
     @Test
     public void testUniqueTaskIds() {
-        Task task1 = new Task("Task1", "Описание1", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
-        Task task2 = new Task("Task1", "Описание2", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
-        Task task3 = new Task("Task1", "Описание3", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        Task task1 = new Task("Task1", "Описание1", Taskstatus.NEW, LocalDateTime.now(), Duration.ofHours(1));
+        Task task2 = new Task("Task2", "Описание2", Taskstatus.NEW, LocalDateTime.now().plusHours(4),
+                Duration.ofHours(1));
+        Task task3 = new Task("Task3", "Описание3", Taskstatus.NEW, LocalDateTime.now().plusHours(6),
+                Duration.ofHours(2));
 
         taskManager.addNewTask(task1);
         taskManager.addNewTask(task2);

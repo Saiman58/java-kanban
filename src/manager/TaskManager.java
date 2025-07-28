@@ -54,10 +54,7 @@ public interface TaskManager {
     //История задач
     List<Task> getHistory();
 
-    // Время/ Сортировка по времени
-    LocalDateTime getEndTime(LocalDateTime startTime, Duration duration);
-
-    public Set<Task> getPrioritizedTasks();
+    List<Task> getPrioritizedTasks ();
 
 
 }

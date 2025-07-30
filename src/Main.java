@@ -5,6 +5,9 @@ import tasks.Subtask;
 import tasks.Task;
 import tasks.Taskstatus;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -13,11 +16,32 @@ public class Main {
 
         System.out.println();
         System.out.println("Проверка: Создание Task1");
-        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW);
-        taskManager.createTask(task1);
+        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        taskManager.addNewTask(task1);
         System.out.println(task1);
 
         System.out.println();
+        System.out.println("Проверка: Создание Epic1");
+        Epic epic1 = new Epic("Отпуск", "Купить билеты", LocalDateTime.now(), Duration.ZERO);
+        taskManager.addNewgEpic(epic1);
+        System.out.println(epic1);
+
+        System.out.println();
+        System.out.println("Проверка: Создание Subtask1 в Epic1");
+        Subtask subtask1 = new Subtask("Subtask1", "описание Subtask1", Taskstatus.NEW, epic1.getId(),
+                LocalDateTime.now(), Duration.ofHours(20));
+        taskManager.addNewSubtask(subtask1);
+        System.out.println(subtask1);
+        System.out.println("");
+        System.out.println("Вызов Epic1");
+        System.out.println(epic1);
+
+        System.out.println(epic1.getDuration());
+
+
+
+
+        /*System.out.println();
         System.out.println("Проверка: Создание Task2");
         Task task2 = new Task("Task2", "Кефир, морковь, фасоль", Taskstatus.NEW);
         taskManager.createTask(task2);
@@ -208,7 +232,7 @@ public class Main {
         System.out.println("--------------------------");
         System.out.println("Проверка: вывода истории просмотров");
         System.out.println(taskManager.getHistory());
-        System.out.println();
+        System.out.println();*/
 
     }
 

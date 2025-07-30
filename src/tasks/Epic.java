@@ -1,19 +1,28 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private ArrayList<Subtask> subtasks;
+    private LocalDateTime endTime;
 
-    public Epic(String name, String description) {
-        super(name, description, Taskstatus.NEW);
+
+    public Epic(String name, String description, LocalDateTime startTime, Duration duration) {
+        super(name, description, Taskstatus.NEW, startTime, duration);
         this.subtasks = new ArrayList<>();
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
-    public Epic(int epicId, int idSubtasks, String name, String description) {
-        super(epicId, name, description, Taskstatus.NEW);
+    public Epic(int epicId, int idSubtasks, String name, String description, LocalDateTime startTime, Duration duration) {
+        super(epicId, name, description, Taskstatus.NEW, startTime, duration);
         this.id = idSubtasks;
         this.subtasks = new ArrayList<>();
+        this.duration = duration;
+        this.startTime = startTime;
+
     }
 
     @Override
@@ -37,7 +46,7 @@ public class Epic extends Task {
         return id; // Метод для получения ID
     }
 
-    public void updateStatus() {
+    public void updateStatus() { // обновление статуса
         if (subtasks.isEmpty() || subtasks.stream().allMatch(subtask -> subtask.getStatus() == Taskstatus.NEW)) {
             setStatus(Taskstatus.NEW);
         } else if (subtasks.stream().allMatch(subtask -> subtask.getStatus() == Taskstatus.DONE)) {
@@ -47,6 +56,63 @@ public class Epic extends Task {
         }
     }
 
+    // Методы для расчёта duration, startTime и endTime
+
+
+    public LocalDateTime calculateStartTime() {
+        LocalDateTime minStartTime = null;
+        for (Subtask subtask : subtasks) {
+            if (minStartTime == null || subtask.getStartTime().isBefore(minStartTime)) {
+                minStartTime = subtask.getStartTime();
+            }
+        }
+        return minStartTime;
+    }
+
+    public Duration calculateDuration() {
+        Duration totalDuration = Duration.ZERO;
+        for (Subtask subtask : subtasks) {
+            totalDuration = totalDuration.plus(subtask.getDuration());
+        }
+        return totalDuration;
+    }
+
+    public LocalDateTime calculateEndTime() {
+        LocalDateTime maxEndTime = null;
+        for (Subtask subtask : subtasks) {
+            LocalDateTime subtaskEndTime = subtask.getStartTime().plus(subtask.getDuration());
+            if (maxEndTime == null || subtaskEndTime.isAfter(maxEndTime)) {
+                maxEndTime = subtaskEndTime;
+            }
+        }
+        return maxEndTime;
+    }
+
+
+
+    @Override
+    public Duration getDuration() {
+        return duration;
+    }
+
+    @Override
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    @Override
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
 
     @Override
     public String toString() {
@@ -55,6 +121,8 @@ public class Epic extends Task {
                 ", name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", status=" + getStatus() +
+                ", startTime=" + getStartTime() +
+                ", duration=" + getDuration() +
                 ", subtasks=" + subtasks +
                 '}';
     }

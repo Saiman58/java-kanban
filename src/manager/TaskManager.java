@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TaskManager {
     //методы для Task
-    Task createTask(Task task);
+    Task addNewTask(Task task);
 
     Task updateTask(Task task);
 
@@ -20,6 +20,7 @@ public interface TaskManager {
     void deleteTasks();
 
     ArrayList<Task> allTasks();
+
 
     //методы для Subtask
     Subtask addNewSubtask(Subtask subtask);
@@ -35,7 +36,7 @@ public interface TaskManager {
     void deleteAllSubtask();
 
     //методы для Epic
-    Epic creatingEpic(Epic epic);
+    Epic addNewgEpic(Epic epic);
 
     Epic updateEpic(Epic epic);
 
@@ -49,4 +50,8 @@ public interface TaskManager {
 
     //История задач
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
+
+
 }

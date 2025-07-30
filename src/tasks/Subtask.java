@@ -1,15 +1,20 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private int idEpic;
 
-    public Subtask(String name, String description, Taskstatus taskstatus, int idEpic) {
-        super(name, description, taskstatus);
+    public Subtask(String name, String description, Taskstatus taskstatus, int idEpic,
+                   LocalDateTime startTime, Duration duration) {
+        super(name, description, taskstatus, startTime, duration);
         this.idEpic = idEpic;
     }
 
-    public Subtask(int idSubtask, int idEpic, String name, String description, Taskstatus taskstatus) {
-        super(idSubtask, name, description, taskstatus);
+    public Subtask(int idSubtask, int idEpic, String name, String description, Taskstatus taskstatus,
+                   LocalDateTime startTime, Duration duration) {
+        super(idSubtask, name, description, taskstatus, startTime, duration);
         this.idEpic = idEpic;
     }
 
@@ -31,6 +36,10 @@ public class Subtask extends Task {
                 ", name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", status=" + getStatus() +
+                ", startTime=" + getStartTime() +
+                ", duration=" + getDuration() +
                 '}';
     }
+
+
 }

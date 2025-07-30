@@ -2,11 +2,11 @@ package manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
 import tasks.Task;
-import tasks.Subtask;
 import tasks.Taskstatus;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,15 +23,16 @@ public class InMemoryHistoryManagerTest {
     @Test
     public void testAddTaskToHistory() { //Добавления задачи в историю
         InMemoryHistoryManager manager = new InMemoryHistoryManager();
-        Task task = new Task("Таска", "Описание", Taskstatus.NEW);
+        Task task = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(),
+                Duration.ZERO);
         manager.add(task);
         assertTrue(manager.getHistory().contains(task));
     }
 
     @Test
     public void testRemoveTaskFromHistory() { // Удаление задачи из истории
-        Task task = new Task("Таска22", "Описание", Taskstatus.NEW);
-        taskManager.createTask(task);
+        Task task = new Task("Task1", "Описание", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+        taskManager.addNewTask(task);
         taskManager.deleteTask(task.getId()); // Удаляем задачу из менеджера
         List<Task> history = taskManager.getHistory();
         assertFalse(history.contains(task), "Задача должна быть удалена из истории.");
@@ -41,15 +42,17 @@ public class InMemoryHistoryManagerTest {
     public void testRemoveFirstNode() {
         InMemoryTaskManager manager = new InMemoryTaskManager();
 
-        // Создаем несколько задач
-        Task task1 = new Task("Task1", "Описание Task 1", Taskstatus.NEW);
-        Task task2 = new Task("Task2", "Описание Task 2", Taskstatus.NEW);
-        Task task3 = new Task("Task3", "Описание Task 3", Taskstatus.NEW);
+        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW,
+                LocalDateTime.now(), Duration.ofHours(1)); //  сейчас
+        Task task2 = new Task("Task2", "Описание2", Taskstatus.NEW,
+                LocalDateTime.now().plusHours(1).plusMinutes(30), Duration.ofHours(1)); //  через 1 час 30 минут
+        Task task3 = new Task("Task3", "Описание3", Taskstatus.NEW,
+                LocalDateTime.now().plusHours(3), Duration.ofHours(1)); //  через 3 часа
 
         // Добавляем задачи в менеджер
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createTask(task3);
+        manager.addNewTask(task1);
+        manager.addNewTask(task2);
+        manager.addNewTask(task3);
 
         // Проверяем, что задачи добавлены
         assertEquals(3, manager.allTasks().size(), "История должна содержать 3 задачи.");
@@ -73,12 +76,15 @@ public class InMemoryHistoryManagerTest {
         InMemoryTaskManager taskManager = new InMemoryTaskManager();
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
-        Task task1 = new Task("Task1", "Task 1", Taskstatus.NEW);
-        Task task2 = new Task("Task2", "Task 2", Taskstatus.NEW);
+        // Обратите внимание на время начала задач
+        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(),
+                Duration.ofMinutes(10));
+        Task task2 = new Task("Task2", "Описание2", Taskstatus.NEW, LocalDateTime.now().plusMinutes(11),
+                Duration.ofMinutes(10));
 
         // Создаем задачи
-        taskManager.createTask(task1);
-        taskManager.createTask(task2);
+        taskManager.addNewTask(task1);
+        taskManager.addNewTask(task2);
 
         // Добавляем задачи в историю
         historyManager.add(task1);
@@ -90,7 +96,7 @@ public class InMemoryHistoryManagerTest {
         assertTrue(history.contains(task2));
 
         // Повторное добавление задачи
-        historyManager.add(task1);
+        historyManager.add(task1); // Добавляем task1 снова
 
         // Проверяем размер истории
         history = historyManager.getHistory();

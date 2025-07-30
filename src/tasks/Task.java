@@ -1,21 +1,30 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
     protected int id;
     private String name;
     private String description;
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
-    public Task(String name, String description, Taskstatus taskstatus) {
+    public Task(String name, String description, Taskstatus taskstatus, LocalDateTime startTime, Duration duration) {
         this.name = name;
         this.description = description;
         this.taskstatus = taskstatus;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
-    public Task(int id, String name, String description, Taskstatus taskstatus) {
+    public Task(int id, String name, String description, Taskstatus taskstatus, LocalDateTime startTime, Duration duration) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.taskstatus = taskstatus;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     private Taskstatus taskstatus;
@@ -48,6 +57,26 @@ public class Task {
         return TaskType.TASK;
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime(LocalDateTime startTime, Duration duration) {
+        return startTime.plus(duration);
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -55,6 +84,8 @@ public class Task {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", taskstatus=" + taskstatus +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
     }
 }

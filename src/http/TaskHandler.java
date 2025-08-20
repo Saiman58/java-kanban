@@ -1,4 +1,4 @@
-package httpApi;
+package http;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;

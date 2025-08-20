@@ -22,7 +22,7 @@ public class Main {
 
         System.out.println();
         System.out.println("Проверка: Создание Epic1");
-        Epic epic1 = new Epic("Отпуск", "Купить билеты", LocalDateTime.now(), Duration.ZERO);
+        Epic epic1 = new Epic("Отпуск", "Купить билеты", LocalDateTime.now(), Duration.ofHours(3));
         taskManager.addNewgEpic(epic1);
         System.out.println(epic1);
 

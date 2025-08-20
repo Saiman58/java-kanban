@@ -1,4 +1,4 @@
-package Http_API;
+package HttpApi;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

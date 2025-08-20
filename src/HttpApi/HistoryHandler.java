@@ -1,4 +1,4 @@
-package Http_API;
+package HttpApi;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
@@ -8,26 +8,26 @@ import tasks.Task;
 import java.io.IOException;
 import java.util.List;
 
-public class PrioritizedHandler extends BaseHttpHandler {
+public class HistoryHandler extends BaseHttpHandler {
     private final TaskManager taskManager;
     private final Gson gson = new Gson();
 
-    public PrioritizedHandler(TaskManager taskManager) {
+    public HistoryHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if ("GET".equals(exchange.getRequestMethod())) {
-            handleGetPrioritizedTasks(exchange);
+            handleGetHistory(exchange);
         } else {
             sendResponse(exchange, "Такого метода нет", 405);
         }
     }
 
-    private void handleGetPrioritizedTasks(HttpExchange exchange) throws IOException {
-        List<Task> prioritizedTasks = taskManager.getPrioritizedTasks();
-        String jsonResponse = gson.toJson(prioritizedTasks);
+    private void handleGetHistory(HttpExchange exchange) throws IOException {
+        List<Task> history = taskManager.getHistory();
+        String jsonResponse = gson.toJson(history);
         sendResponse(exchange, jsonResponse, 200);
     }
 }

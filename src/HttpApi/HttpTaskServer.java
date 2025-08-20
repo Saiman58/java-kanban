@@ -1,4 +1,4 @@
-package Http_API;
+package HttpApi;
 
 import com.sun.net.httpserver.HttpServer; //импорт
 import manager.Managers;

@@ -1,0 +1,5 @@
+id,type,name,status,description,epic, priority,createdDate
+1,TASK,Task1,NEW,Кефир, морковь,2025-08-22T00:04:36.674029600,PT0S
+3,SUBTASK,Subtask1,NEW,описание Subtask1,2,2025-08-22T00:04:36.794011600,PT20H
+2,EPIC,Отпуск,NEW,Купить билеты,
+1,

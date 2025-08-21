@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class CSVFormatter {
 
     public static String getHeader() {
-        return "id,type,name,status,description,epic";
+        return "id,type,name,status,description,epic, priority,createdDate";
     }
 
     public static String toString(Task task) {
@@ -79,8 +79,6 @@ public class CSVFormatter {
         }
 
     }
-
-
 }
 
 

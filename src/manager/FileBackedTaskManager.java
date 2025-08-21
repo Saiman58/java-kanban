@@ -51,27 +51,32 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return taskManager;
     }
 
+    //Task
     @Override
     public Task getTask(int id) {
         Task task = super.getTask(id);
         return task;
     }
 
+
     @Override
     public Task addNewTask(Task task) {
         Task crearedTask = super.addNewTask(task);
+        save();
         return crearedTask;
     }
 
     @Override
     public Task updateTask(Task task) {
         Task updateTask = super.updateTask(task);
+        save();
         return updateTask;
     }
 
     @Override
     public Task deleteTask(int id) {
         Task task = super.deleteTask(id);
+        save();
         return task;
     }
 
@@ -80,6 +85,51 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         super.deleteTasks();
         save();
     }
+
+    //Subtask
+    @Override
+    public Subtask addNewSubtask(Subtask subtask) {
+        Subtask createdSubtask = super.addNewSubtask(subtask);
+        save(); // Сохраняем данные после добавления подзадачи
+        return createdSubtask;
+    }
+
+    @Override
+    public Subtask updateSubtask(Subtask subtask) {
+        Subtask updateSubtask = super.updateSubtask(subtask);
+        save();
+        return updateSubtask;
+    }
+
+    @Override
+    public Subtask deleteSubtask(int id) {
+        Subtask subtask = super.deleteSubtask(id);
+        save(); // Сохраняем данные после удаления подзадачи
+        return subtask;
+    }
+
+    //Epic
+    @Override
+    public Epic addNewgEpic(Epic epic) {
+        Epic createdEpic = super.addNewgEpic(epic);
+        save(); // Сохраняем данные после добавления эпика
+        return createdEpic;
+    }
+
+    @Override
+    public Epic updateEpic(Epic epic) {
+        Epic updatedEpic = super.updateEpic(epic);
+        save(); // Сохраняем данные после обновления эпика
+        return updatedEpic;
+    }
+
+    @Override
+    public Epic deleteEpicToId(int id) {
+        Epic epic = super.deleteEpicToId(id);
+        save(); // Сохраняем данные после удаления эпика
+        return epic;
+    }
+
 
     /**
      * Пример формата сохранения:

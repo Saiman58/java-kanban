@@ -1,48 +1,31 @@
 package http;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import manager.TaskManager;
 import tasks.Task;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 public class TaskHandler extends BaseHttpHandler {
-    private final TaskManager taskManager;
-    private final Gson gson = new Gson();
 
     public TaskHandler(TaskManager taskManager) {
-        this.taskManager = taskManager;
+        super(taskManager);
     }
 
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        switch (exchange.getRequestMethod()) {
-            case "GET":
-                handleGetTasks(exchange);
-                break;
-            case "POST":
-                handleAddTask(exchange);
-                break;
-            case "DELETE":
-                handleDeleteTask(exchange);
-                break;
-            default:
-                sendResponse(exchange, "Такого метода нет", 405);
-                break;
-        }
-    }
-
-    private void handleGetTasks(HttpExchange exchange) throws IOException {
+    @Override //GET
+    protected void processGet(HttpExchange exchange) throws IOException {
         String jsonResponse = gson.toJson(taskManager.allTasks());
         sendResponse(exchange, jsonResponse, 200);
     }
 
-    private void handleAddTask(HttpExchange exchange) throws IOException {
-        InputStream inputStream = exchange.getRequestBody();
-        String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+    @Override // POST
+    protected void processPost(HttpExchange exchange) throws IOException {
+        String body = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8))
+                .lines()
+                .collect(Collectors.joining("\n"));
+
         Task newTask = gson.fromJson(body, Task.class);
 
         try {
@@ -53,14 +36,17 @@ public class TaskHandler extends BaseHttpHandler {
         }
     }
 
-    private void handleDeleteTask(HttpExchange exchange) throws IOException {
+
+    @Override //DELETE
+    protected void processDelete(HttpExchange exchange) throws IOException {
         String query = exchange.getRequestURI().getQuery();
         if (query == null || !query.startsWith("id=")) {
             sendResponse(exchange, "ID задачи не указан", 400);
             return;
         }
         int id = Integer.parseInt(query.split("=")[1]);
-        taskManager.deleteTask(id);
+        taskManager.deleteTask(id); // Удаляем задачу
         sendResponse(exchange, "Задача успешно удалена", 200);
     }
+
 }

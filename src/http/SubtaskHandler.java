@@ -5,46 +5,32 @@ import com.sun.net.httpserver.HttpExchange;
 import manager.TaskManager;
 import tasks.Subtask;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SubtaskHandler extends BaseHttpHandler {
-    private final TaskManager taskManager;
-    private final Gson gson = new Gson();
 
     public SubtaskHandler(TaskManager taskManager) {
-        this.taskManager = taskManager;
+        super(taskManager);
     }
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        switch (exchange.getRequestMethod()) {
-            case "GET":
-                handleGetSubtasks(exchange);
-                break;
-            case "POST":
-                handleAddSubtask(exchange);
-                break;
-            case "DELETE":
-                handleDeleteSubtask(exchange);
-                break;
-            default:
-                sendResponse(exchange, "Такого метода нет", 405);
-                break;
-        }
-    }
-
-    private void handleGetSubtasks(HttpExchange exchange) throws IOException {
+    protected void processGet(HttpExchange exchange) throws IOException {
         List<Subtask> subtasks = taskManager.allSubtasks();
         String jsonResponse = gson.toJson(subtasks);
         sendResponse(exchange, jsonResponse, 200);
     }
 
-    private void handleAddSubtask(HttpExchange exchange) throws IOException {
-        InputStream inputStream = exchange.getRequestBody();
-        String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+    @Override
+    protected void processPost(HttpExchange exchange) throws IOException {
+        String body = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8))
+                .lines()
+                .collect(Collectors.joining("\n"));
+
         Subtask newSubtask = gson.fromJson(body, Subtask.class);
 
         try {
@@ -55,15 +41,15 @@ public class SubtaskHandler extends BaseHttpHandler {
         }
     }
 
-
-    private void handleDeleteSubtask(HttpExchange exchange) throws IOException {
+    @Override
+    protected void processDelete(HttpExchange exchange) throws IOException {
         String query = exchange.getRequestURI().getQuery();
         if (query == null || !query.startsWith("id=")) {
-            sendResponse(exchange, "ID задачи не указан", 400);
+            sendResponse(exchange, "ID подзадачи не указан", 400);
             return;
         }
         int id = Integer.parseInt(query.split("=")[1]);
         taskManager.deleteSubtask(id);
-        sendResponse(exchange, "Задача успешно удалена", 200);
+        sendResponse(exchange, "Подзадача успешно удалена", 200);
     }
 }

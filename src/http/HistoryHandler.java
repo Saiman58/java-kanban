@@ -9,11 +9,9 @@ import java.io.IOException;
 import java.util.List;
 
 public class HistoryHandler extends BaseHttpHandler {
-    private final TaskManager taskManager;
-    private final Gson gson = new Gson();
 
     public HistoryHandler(TaskManager taskManager) {
-        this.taskManager = taskManager;
+        super(taskManager);
     }
 
     @Override

@@ -3,13 +3,10 @@ package http;
 import com.sun.net.httpserver.HttpServer; //импорт
 import manager.Managers;
 import manager.TaskManager;
-import tasks.Task;
-import tasks.Taskstatus;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.time.Duration;
-import java.time.LocalDateTime;
+
 
 public class HttpTaskServer {
     private final TaskManager taskManager;
@@ -37,7 +34,6 @@ public class HttpTaskServer {
         HttpTaskServer server = new HttpTaskServer(taskManager); //сервер с менеджером задач
         server.start(); //запуск сервера
         System.out.println("Сервер работает по порту 8080");
-        System.out.println("Проверка: Создание Task1");
-        Task task1 = new Task("Task1", "Кефир, морковь", Taskstatus.NEW, LocalDateTime.now(), Duration.ZERO);
+
     }
 }
